@@ -1,4 +1,9 @@
 package cap08.ticket_booking.domain.model;
 
-public class Event {
+public record Event(
+        Long id,
+        String name,
+        int totalTickets,
+        int availableTickets
+) {
 }
