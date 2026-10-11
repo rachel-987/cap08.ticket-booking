@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EventRepositoryPort {
+    // Lưu Event mới vào hệ thống
+    Event save(Event event);
 
     // Tìm sự kiện theo ID
     Optional<Event> findById(Long id);

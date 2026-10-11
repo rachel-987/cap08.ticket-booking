@@ -19,12 +19,32 @@ public class EventRepositoryAdapter implements EventRepositoryPort {
         this.jpaRepository = jpaRepository;
     }
 
+    // 1. Lưu Event mới vào Database
+    @Override
+    public Event save(Event event) {
+
+        // Domain Model -> JPA Entity
+        EventJpaEntity entity = new EventJpaEntity(
+                event.name(),
+                event.totalTickets(),
+                event.availableTickets()
+        );
+
+        // Lưu xuống Database
+        EventJpaEntity savedEntity = jpaRepository.save(entity);
+
+        // JPA Entity -> Domain Model
+        return toDomain(savedEntity);
+    }
+
+    // 2. Tìm Event theo ID
     @Override
     public Optional<Event> findById(Long id) {
         return jpaRepository.findById(id)
                 .map(this::toDomain);
     }
 
+    // 3. Lấy danh sách Event
     @Override
     public List<Event> findAll() {
         return jpaRepository.findAll()
@@ -33,6 +53,7 @@ public class EventRepositoryAdapter implements EventRepositoryPort {
                 .toList();
     }
 
+    // 4. Trừ số lượng vé
     @Override
     public int decreaseAvailableTickets(
             Long eventId,
@@ -44,7 +65,7 @@ public class EventRepositoryAdapter implements EventRepositoryPort {
         );
     }
 
-    // Mapping JPA Entity -> Domain Model
+    // 5. Mapping JPA Entity -> Domain Model
     private Event toDomain(EventJpaEntity entity) {
 
         return new Event(
